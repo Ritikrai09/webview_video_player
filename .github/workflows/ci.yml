@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  webviewtube:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        flutter-version:
+          ["3.16.6", "3.19.6", "3.22.3", "3.24.0"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.flutter-version }}
+          channel: "stable"
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+
+      - name: Code generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze
+        run: flutter analyze lib test example
+
+      - name: Test
+        run: flutter test --no-pub --coverage
