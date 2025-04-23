@@ -24,5 +24,5 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.4
-  webview_flutter_platform_interface: ^2.8.0
+  mockito: ^5.4.6
+  webview_flutter_platform_interface: ^2.11.0

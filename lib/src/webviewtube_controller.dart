@@ -440,6 +440,10 @@ String _generateIframePage(String videoId, WebviewtubeOptions options) {
             }
         </style>
         <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>
+        <link rel="preconnect" href="https://www.youtube.com">
+        <link rel="preconnect" href="https://www.google.com">
+        <link rel="preconnect" href="https://i.ytimg.com">
+        <link rel="preload" as="image" href="https://i.ytimg.com/vi/$videoId/hqdefault.jpg">
     </head>
 <body>
     <div id="player"></div>
@@ -447,6 +451,7 @@ String _generateIframePage(String videoId, WebviewtubeOptions options) {
     <script>
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
+        tag.async = true;
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -459,7 +464,7 @@ String _generateIframePage(String videoId, WebviewtubeOptions options) {
                 videoId: '$videoId',
                 host: 'https://www.youtube.com',
                 playerVars: {
-                    'cc_load_policy': ${_boolean(options.enableCaption)},
+                    'cc_load_policy': ${options.enableCaption == true} ? 1 : 0,
                     'cc_lang_pref': '${options.captionLanguage}',
                     'controls': ${_boolean(options.showControls)},
                     'enablejsapi': 1,
@@ -472,7 +477,8 @@ String _generateIframePage(String videoId, WebviewtubeOptions options) {
                     'rel': 0,
                     'start': ${options.startAt},
                     'end': ${options.endAt},
-                    'origin': 'https://www.youtube.com'
+                    'origin': 'https://www.youtube.com',
+                    'modestbranding' : 1
                 },
                 events: {
                     onReady: function (event) { sendMessageToDart('Ready'); },
@@ -502,11 +508,12 @@ String _generateIframePage(String videoId, WebviewtubeOptions options) {
         }
 
         function sendVideoData(player) {
+        let data = player.getVideoData();
             var videoData = {
                 'duration': player.getDuration(),
-                'title': player.getVideoData().title,
-                'author': player.getVideoData().author,
-                'videoId': player.getVideoData().video_id
+                'title': data.title,
+                'author': data.author,
+                'videoId': data.video_id
             };
             sendMessageToDart('VideoData', videoData);
         }

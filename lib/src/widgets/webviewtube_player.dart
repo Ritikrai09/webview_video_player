@@ -42,8 +42,7 @@ import '../webviewtube.dart';
 /// {@endtemplate}
 class WebviewtubePlayer extends StatelessWidget {
   /// {@macro webviewtube_player}
-  WebviewtubePlayer(
-      {super.key, required this.videoId, WebviewtubeController? controller})
+  WebviewtubePlayer({super.key, required this.videoId, WebviewtubeController? controller})
       : _controller = controller;
 
   /// The video id of the video to play.
@@ -97,12 +96,10 @@ class _WebviewtubePlayerViewState extends State<_WebviewtubePlayerView> {
   Widget build(BuildContext context) {
     return Material(
       elevation: 0,
-      color: Colors.black,
+      color: Colors.transparent,
       child: AspectRatio(
         aspectRatio: context.read<WebviewtubeController>().options.aspectRatio,
-        child: WebViewWidget(
-            controller:
-                context.read<WebviewtubeController>().webViewController),
+        child: WebViewWidget(controller: context.read<WebviewtubeController>().webViewController),
       ),
     );
   }
